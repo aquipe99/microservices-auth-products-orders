@@ -1,4 +1,4 @@
-# Spring Boot Microservices Platform
+# microservices-auth-products-orders
 
 Proyecto backend desarrollado con **Java 17 y Spring Boot 3**, basado en una arquitectura de **microservicios**.  
 El sistema implementa autenticación con **JWT**, autorización por roles y gestión de productos y órdenes, integrando servicios de configuración centralizada, descubrimiento de servicios y seguridad.
