@@ -1,321 +1,296 @@
-# microservices-auth-products-orders
+# 🚀 Microservices Auth Products Orders
 
-Proyecto backend desarrollado con **Java 17** y **Spring Boot 3**, basado en una arquitectura de microservicios.
-El sistema implementa **autenticación con JWT**, **autorización por roles**, **gestión de productos y órdenes**, además de integrar **configuración centralizada**, **descubrimiento de servicios**, **gestión de secretos** y **API Gateway**.
-
----
-
-## Descripción general
-
-La plataforma está compuesta por varios microservicios independientes que se comunican entre sí mediante APIs REST.
-Cada servicio tiene una responsabilidad específica, lo que permite una arquitectura modular, escalable y fácil de mantener.
-
-Este proyecto fue desarrollado como práctica para fortalecer conocimientos en:
-
-* Arquitectura de microservicios
-* Seguridad con JWT
-* Spring Cloud
-* Configuración centralizada
-* Gestión de secretos
-* API Gateway
-* Buenas prácticas de testing y calidad de código
+Plataforma de microservicios desarrollada con **Java 17**, **Spring Boot 3** y **Spring Cloud**, implementando autenticación mediante **JWT**, autorización basada en roles, configuración centralizada, descubrimiento de servicios, gestión segura de secretos y un **API Gateway** como punto único de entrada.
 
 ---
 
-## Arquitectura
+# 📌 Objetivo
 
-La solución está compuesta por los siguientes microservicios y componentes de infraestructura:
-
-* **ms-auth** → Autenticación y autorización de usuarios mediante JWT
-* **ms-productos** → Gestión de productos
-* **ms-ordenes** → Gestión de órdenes de compra
-* **api-gateway** → Punto único de entrada para todos los servicios
-* **eureka-server** → Registro y descubrimiento de microservicios
-* **config-server** → Configuración centralizada de los servicios
-* **vault** → Gestión segura de secretos y credenciales
+El objetivo de este proyecto es demostrar la implementación de una arquitectura de microservicios utilizando el ecosistema **Spring Cloud**, aplicando buenas prácticas de seguridad, separación de responsabilidades y administración centralizada de la infraestructura.
 
 ---
+
+# ✨ Características
+
+- Arquitectura basada en Microservicios
+- API Gateway
+- Service Discovery con Eureka Server
+- Configuración centralizada mediante Config Server
+- Gestión segura de secretos utilizando HashiCorp Vault
+- Autenticación con JWT
+- Autorización basada en roles
+- CRUD de Productos
+- Gestión de Órdenes
+- Integración con PostgreSQL
+- Testing con JUnit y Mockito
+- Calidad de código con JaCoCo y SonarCloud
+
+---
+
+# 🛠 Tecnologías
+
+## Backend
+
+- Java 17
+- Spring Boot 3
+
+## Seguridad
+
+- Spring Security
+- JWT
+
+## Spring Cloud
+
+- Eureka Server
+- Config Server
+- Spring Cloud Gateway
+
+## Base de Datos
+
+- PostgreSQL
+
+## Gestión de Secretos
+
+- HashiCorp Vault
+
+## Testing
+
+- JUnit 5
+- Mockito
+
+## Calidad de Código
+
+- JaCoCo
+- SonarCloud
+
+## Build Tool
+
+- Maven
+
+---
+
+# 🏛 Arquitectura
+
+La solución está compuesta por múltiples microservicios independientes, cada uno responsable de una parte específica del negocio.
+
+```
+                   Cliente
+                      │
+                      ▼
+               API Gateway
+                      │
+      ┌───────────────┼───────────────┐
+      ▼               ▼               ▼
+  ms-auth      ms-productos      ms-ordenes
+      │               │               │
+      └───────────────┼───────────────┘
+                      ▼
+                 PostgreSQL
+
+
+Infraestructura
+
+• Eureka Server
+• Config Server
+• HashiCorp Vault
+```
+
+Cada servicio puede evolucionar de forma independiente manteniendo una arquitectura modular y escalable.
+
+---
+
+# 📦 Microservicios
 
 ## API Gateway
 
-Se incorporó un **API Gateway** para centralizar el acceso a los microservicios.
+Punto único de entrada para todas las solicitudes del sistema.
 
-### Función del Gateway
+Responsabilidades:
 
-El Gateway permite:
+- Enrutamiento de peticiones
+- Centralización del acceso
+- Simplificación del consumo de la API
 
-* exponer un único punto de entrada al sistema
-* enrutar peticiones a los microservicios correspondientes
-* simplificar el consumo de la API
-* preparar la arquitectura para futuros despliegues en la nube
+Puerto:
 
-### Punto de entrada
-
-```text
-http://localhost:8080
 ```
-
-### Rutas configuradas
-
-| Servicio  | Ruta                        |
-| --------- | --------------------------- |
-| Auth      | `/apis/codigo/auth/**`      |
-| Productos | `/apis/codigo/productos/**` |
-| Órdenes   | `/apis/codigo/ordenes/**`   |
-
-Actualmente, el Gateway enruta a los microservicios mediante URLs locales directas para asegurar estabilidad en entorno local.
-
----
-
-## Funcionalidades principales
-
-## Autenticación y autorización
-
-El microservicio `ms-auth` se encarga de la seguridad del sistema.
-
-### Funcionalidades
-
-* Registro de usuarios
-* Login con generación de JWT
-* Validación de credenciales
-* Autorización basada en roles
-* Protección de endpoints según permisos
-
-### Roles implementados
-
-* **SUPERADMIN**
-* **ADMIN**
-* **USER**
-
-### Ejemplo de login
-
-**Endpoint**
-
-```http
-POST /apis/codigo/auth/login
-```
-
-**Ejemplo de request**
-
-```json
-{
-  "correo": "adminnuevo@gmail.com",
-  "password": "adminnuevo123"
-}
-```
-
-**Ejemplo de respuesta**
-
-```json
-{
-  "accessToken": "JWT_TOKEN",
-  "refreshToken": null
-}
-```
-
-### Validación de tokens
-
-Los tokens JWT se utilizan para proteger el acceso a los demás microservicios, permitiendo controlar qué operaciones puede realizar cada usuario según su rol.
-
----
-
-## Gestión de productos
-
-El microservicio `ms-productos` se encarga de la administración del catálogo de productos.
-
-### Operaciones principales
-
-* Crear producto
-* Listar productos
-* Actualizar producto
-* Eliminar producto
-
-### Restricciones
-
-Solo usuarios con rol:
-
-* **ADMIN**
-* **SUPERADMIN**
-
-pueden acceder a las operaciones de administración de productos.
-
-### Acceso vía Gateway
-
-```http
-GET /apis/codigo/productos
-Authorization: Bearer TU_TOKEN
+8080
 ```
 
 ---
 
-## Gestión de órdenes
+## ms-auth
 
-El microservicio `ms-ordenes` se encarga de la creación y consulta de órdenes de compra.
+Responsable de la autenticación y autorización.
 
-### Operaciones principales
+Funcionalidades:
 
-* Crear órdenes
-* Consultar órdenes
-* Validar productos antes de registrar una orden
+- Registro de usuarios
+- Login
+- Generación de JWT
+- Validación de credenciales
+- Protección de endpoints
 
-### Reglas generales
+Roles implementados:
 
-* Los usuarios pueden crear órdenes
-* Los administradores pueden visualizar y gestionar órdenes
-* Antes de crear una orden se valida la información de productos
-
-### Acceso vía Gateway
-
-```http
-POST /apis/codigo/ordenes
-Authorization: Bearer TU_TOKEN
-```
+- SUPERADMIN
+- ADMIN
+- USER
 
 ---
 
-## Infraestructura y herramientas
+## ms-productos
 
-Este proyecto utiliza herramientas comunes en arquitecturas modernas de microservicios:
+Responsable de la administración del catálogo de productos.
 
-* **Java 17**
-* **Spring Boot 3**
-* **Spring Security**
-* **JWT**
-* **Spring Cloud Eureka**
-* **Spring Cloud Config Server**
-* **Spring Cloud Gateway**
-* **HashiCorp Vault**
-* **PostgreSQL**
-* **Maven**
+Operaciones principales:
 
----
+- Crear productos
+- Actualizar productos
+- Consultar productos
+- Eliminar productos
 
-## Testing y calidad de código
+Acceso permitido para:
 
-El proyecto incluye prácticas de calidad para asegurar mejor mantenimiento y confiabilidad.
-
-### Testing
-
-* Pruebas unitarias con **JUnit**
-* Mocking con **Mockito**
-
-### Calidad
-
-* Análisis de cobertura con **Jacoco**
-* Inspección continua con **SonarCloud**
+- ADMIN
+- SUPERADMIN
 
 ---
 
-## Flujo general del sistema
+## ms-ordenes
 
-1. El cliente realiza login a través del API Gateway
-2. El Gateway redirige la petición al microservicio `ms-auth`
-3. `ms-auth` valida las credenciales y genera el token JWT
-4. El cliente utiliza ese token para consumir productos y órdenes
-5. Todas las peticiones ingresan por el Gateway
-6. Los servicios usan Config Server, Eureka y Vault como parte de la infraestructura
+Responsable de la gestión de órdenes.
 
----
+Operaciones:
 
-## Orden de ejecución
-
-Para ejecutar el sistema en entorno local, se recomienda iniciar los servicios en este orden:
-
-1. **Vault**
-2. **Config Server**
-3. **Eureka Server**
-4. **ms-auth**
-5. **ms-productos**
-6. **ms-ordenes**
-7. **api-gateway**
+- Registrar órdenes
+- Consultar órdenes
+- Validar productos antes del registro
 
 ---
 
-## Puertos utilizados
+# 🔄 Flujo del sistema
 
-| Servicio      | Puerto |
-| ------------- | ------ |
-| api-gateway   | 8080   |
-| ms-auth       | 8081   |
-| ms-productos  | 8082   |
-| ms-ordenes    | 8083   |
-| config-server | 8888   |
-| eureka-server | 8761   |
-| vault         | 8200   |
-
----
-
-## Configuración
-
-La solución utiliza:
-
-* **Config Server** para centralizar propiedades de configuración
-* **Vault** para almacenar secretos y credenciales sensibles
-* **Eureka** para el registro de servicios
-* **API Gateway** para centralizar el acceso a la plataforma
+1. El cliente realiza login mediante el API Gateway.
+2. El Gateway redirige la petición al microservicio de autenticación.
+3. El microservicio genera un JWT válido.
+4. El cliente utiliza ese JWT para consumir los demás servicios.
+5. Todas las solicitudes ingresan por el Gateway.
+6. Los microservicios obtienen su configuración desde Config Server.
+7. Las credenciales sensibles son administradas mediante Vault.
+8. Eureka mantiene registrado el estado de todos los servicios.
 
 ---
 
-## Pruebas manuales
+# 🔗 Endpoints principales
 
-El sistema puede probarse con herramientas como **Postman**, utilizando el Gateway como punto de entrada.
-
-### Ejemplos de pruebas
-
-* Login exitoso
-* Consulta de productos
-* Creación de órdenes
-
-Todas las pruebas se realizan a través de:
-
-```text
-http://localhost:8080
-```
+| Método | Endpoint | Descripción |
+|---------|----------|-------------|
+| POST | /apis/codigo/auth/login | Iniciar sesión |
+| POST | /apis/codigo/auth/register | Registrar usuario |
+| GET | /apis/codigo/productos | Obtener productos |
+| POST | /apis/codigo/productos | Crear producto |
+| GET | /apis/codigo/ordenes | Consultar órdenes |
+| POST | /apis/codigo/ordenes | Registrar orden |
 
 ---
 
-## Estructura del repositorio
+# ▶️ Ejecución del proyecto
 
-Una posible estructura del proyecto es la siguiente:
+Se recomienda iniciar los servicios en el siguiente orden:
 
-```text
-microservices-auth-products-orders/
-├── api-gateway
-├── ms-auth
-├── ms-productos
-├── ms-ordenes
-├── eureka-server
-├── config-server
-└── README.md
-```
+1. HashiCorp Vault
+2. Config Server
+3. Eureka Server
+4. ms-auth
+5. ms-productos
+6. ms-ordenes
+7. API Gateway
 
 ---
 
-## Posibles mejoras
+# 🌐 Puertos utilizados
 
-* Implementar balanceo completo mediante `lb://` usando Eureka
-* Validar JWT directamente en el API Gateway
-* Dockerizar todos los servicios
-* Desplegar la solución en Azure
-* Agregar monitoreo y observabilidad
-
----
-
-## Objetivo del proyecto
-
-Este proyecto busca demostrar conocimientos prácticos en:
-
-* diseño de microservicios
-* seguridad con JWT
-* autorización por roles
-* integración con Spring Cloud
-* configuración centralizada
-* gestión segura de secretos
-* implementación de API Gateway
-* pruebas y calidad de código
+| Servicio | Puerto |
+|----------|--------|
+| API Gateway | 8080 |
+| ms-auth | 8081 |
+| ms-productos | 8082 |
+| ms-ordenes | 8083 |
+| Config Server | 8888 |
+| Eureka Server | 8761 |
+| HashiCorp Vault | 8200 |
 
 ---
 
-## Autor
+# 🧪 Testing
 
-Proyecto desarrollado como práctica profesional para fortalecer habilidades en desarrollo backend y arquitectura de microservicios.
+El proyecto incorpora pruebas unitarias utilizando:
+
+- JUnit 5
+- Mockito
+
+Además se utiliza:
+
+- JaCoCo para cobertura de código
+- SonarCloud para análisis de calidad
+
+---
+
+# 📚 Conceptos aplicados
+
+Durante el desarrollo de este proyecto se implementaron conocimientos relacionados con:
+
+- Arquitectura de Microservicios
+- Spring Cloud
+- Spring Security
+- JWT
+- API Gateway
+- Eureka Server
+- Config Server
+- HashiCorp Vault
+- Arquitectura desacoplada
+- APIs REST
+- Seguridad basada en roles
+
+---
+
+# 🚀 Próximas mejoras
+
+- Contenerización completa mediante Docker
+- Docker Compose para toda la plataforma
+- Balanceo de carga utilizando Eureka (`lb://`)
+- Despliegue en Kubernetes
+- Observabilidad con Prometheus y Grafana
+- Integración de Apache Kafka para comunicación asíncrona
+
+---
+
+# 📊 Estado del proyecto
+
+✅ Proyecto funcional.
+
+Desarrollado como práctica para fortalecer conocimientos en arquitecturas de microservicios utilizando Spring Cloud y Spring Security.
+
+---
+
+# 👨‍💻 Autor
+
+**Alex Choque**
+
+Java Backend Developer
+
+Tecnologías principales:
+
+- Java
+- Spring Boot
+- Spring Cloud
+- Spring Security
+- JWT
+- PostgreSQL
+- Docker
+- Kubernetes
+
+GitHub:
+
+https://github.com/aquipe99
